@@ -1,1 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORN Product — ARA Agents™</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--s1:#13161d;--s2:#1a1e27;
+  --bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.12);
+  --acc:#5b8def;--grn:#21c98a;--amb:#f0a535;--red:#ef5050;
+  --tx:#dfe2ec;--mu:#5e6677;--mu2:#8b92a5;
+}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx)}
+#shell{height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
+.bar{display:flex;align-items:center;justify-content:space-between;padding:11px 20px;background:var(--s1);border-bottom:1px solid var(--bd2);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#5b8def,#8b6dfa);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff}
+.brand-name{font-size:15px;font-weight:700}
+.brand-sub{font-size:10px;color:var(--mu)}
+.bar-right{display:flex;align-items:center;gap:10px}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--grn)}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--grn);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;background:rgba(91,141,239,0.15);color:var(--acc);border:1px solid rgba(91,141,239,0.3)}
+.newbtn{font-size:11px;padding:5px 12px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--bd2);color:var(--mu2);cursor:pointer}
+.newbtn:hover{color:var(--tx)}
+
+.body{display:flex;flex:1;overflow:hidden}
+
+.sidebar{width:210px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column}
+.sid-top{padding:14px 12px 8px}
+.sid-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-bottom:8px;font-weight:600}
+.scenario-list{flex:1;overflow-y:auto;padding:0 8px 12px}
+.sc-item{padding:8px 10px;border-radius:8px;cursor:pointer;transition:.15s;border:1px solid transparent;margin-bottom:2px}
+.sc-item:hover{background:rgba(255,255,255,.04)}
+.sc-item.active{background:rgba(91,141,239,.1);border-color:rgba(91,141,239,.25)}
+.sc-title{font-size:11px;font-weight:600;color:var(--mu2)}
+.sc-item.active .sc-title{color:var(--acc)}
+.sc-sub{font-size:10px;color:var(--mu);margin-top:2px}
+.sid-div{height:1px;background:var(--bd);margin:0 12px}
+.agent-section{padding:12px}
+.agent-row{display:flex;align-items:center;gap:7px;padding:4px 0}
+.adot{width:6px;height:6px;border-radius:50%}
+.aname{font-size:11px;color:var(--mu2)}
+.atag{font-size:9px;margin-left:auto;padding:1px 5px;border-radius:4px;font-weight:600}
+
+.chat{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.messages{flex:1;overflow-y:auto;padding:24px 32px;display:flex;flex-direction:column;gap:16px}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+.welcome{text-align:center;padding:50px 20px;max-width:540px;margin:0 auto}
+.welcome h2{font-size:22px;font-weight:700;margin-bottom:12px}
+.welcome p{font-size:13px;color:var(--mu2);line-height:1.7;margin-bottom:28px}
+.starter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left}
+.starter{background:var(--s2);border:1px solid var(--bd2);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.15s}
+.starter:hover{border-color:var(--acc);background:rgba(91,141,239,0.07)}
+.starter-title{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:3px}
+.starter-sub{font-size:11px;color:var(--mu)}
+
+.msg{display:flex;gap:10px;animation:up .2s ease}
+@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.umsg{flex-direction:row-reverse}
+.av{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.av.ara{background:linear-gradient(135deg,#5b8def,#8b6dfa);color:#fff}
+.av.user{background:rgba(255,255,255,.07);border:1px solid var(--bd2);color:var(--mu2);font-size:9px}
+.mbody{display:flex;flex-direction:column;max-width:80%;gap:4px}
+.msg.umsg .mbody{align-items:flex-end}
+.sndr{font-size:10px;color:var(--mu);font-weight:500;padding:0 2px}
+.bubble{padding:12px 16px;border-radius:14px;line-height:1.75;font-size:13.5px}
+.bubble.ara{background:var(--s2);border:1px solid var(--bd);border-top-left-radius:3px;color:var(--tx)}
+.bubble.user{background:rgba(91,141,239,0.13);border:1px solid rgba(91,141,239,0.25);border-top-right-radius:3px}
+.bubble b{color:#fff;font-weight:600}
+.bubble i{color:var(--mu2)}
+
+.good{color:var(--grn)}
+.warn{color:var(--amb)}
+.bad{color:var(--red)}
+.hi{color:var(--acc)}
+
+/* Typewriter cursor */
+.cursor{display:inline-block;width:2px;height:1em;background:var(--acc);margin-left:2px;vertical-align:text-bottom;animation:cur .6s infinite}
+@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
+
+.dcard{background:rgba(255,255,255,0.04);border:1px solid var(--bd2);border-radius:9px;padding:11px 14px;margin-top:10px;font-size:12.5px}
+.dcard-t{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin-bottom:8px;font-weight:600}
+.drow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.drow:last-child{border:none}
+.dk{color:var(--mu2)}
+.dv{font-weight:500;color:var(--tx)}
+
+.qrs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.qr{font-size:12px;padding:6px 13px;border-radius:16px;border:1px solid var(--bd2);color:var(--mu2);background:rgba(255,255,255,0.03);cursor:pointer;transition:.15s}
+.qr:hover{border-color:var(--acc);color:var(--acc)}
+
+.tbubble{display:flex;align-items:center;gap:5px;padding:13px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:14px;border-top-left-radius:3px;width:fit-content}
+.tbubble span{width:7px;height:7px;border-radius:50%;background:var(--mu2);animation:bnc .9s infinite}
+.tbubble span:nth-child(2){animation-delay:.18s}
+.tbubble span:nth-child(3){animation-delay:.36s}
+@keyframes bnc{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+
+.iarea{padding:14px 24px 18px;background:var(--s1);border-top:1px solid var(--bd2);flex-shrink:0}
+.irow{display:flex;gap:10px;align-items:flex-end}
+.ibox{flex:1;background:var(--s2);border:1px solid var(--bd2);border-radius:12px;padding:13px 16px;color:var(--tx);font-size:14px;resize:none;outline:none;min-height:50px;max-height:130px;font-family:inherit;line-height:1.5;transition:border-color .2s}
+.ibox:focus{border-color:var(--acc)}
+.ibox::placeholder{color:var(--mu)}
+.sbtn{width:46px;height:46px;border-radius:11px;background:linear-gradient(135deg,#5b8def,#8b6dfa);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end;transition:.15s}
+.sbtn:hover{opacity:.85}
+.sbtn:disabled{opacity:.3;cursor:not-allowed}
+.sbtn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ihint{font-size:10px;color:var(--mu);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="shell">
+  <div class="bar">
+    <div class="brand">
+      <div class="mark">ORN</div>
+      <div>
+        <div class="brand-name">ORN Product</div>
+        <div class="brand-sub">Powered by ARA Agents™</div>
+      </div>
+    </div>
+    <div class="bar-right">
+      <div class="live"><div class="ldot"></div> 6 agents online</div>
+      <div class="badge">Commercial AI OS</div>
+      <button class="newbtn" onclick="resetChat()">New conversation</button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="sid-top"><div class="sid-label">Demo scenarios</div></div>
+      <div class="scenario-list" id="sc-list"></div>
+      <div class="sid-div"></div>
+      <div class="agent-section">
+        <div class="sid-label">ARA Agents™</div>
+        <div class="agent-row"><div class="adot" style="background:#5b8def"></div><div class="aname">Coordinator</div><div class="atag" style="background:rgba(91,141,239,.15);color:#5b8def">Lead</div></div>
+        <div class="agent-row"><div class="adot" style="background:#21c98a"></div><div class="aname">Commercial</div></div>
+        <div class="agent-row"><div class="adot" style="background:#8b6dfa"></div><div class="aname">Contracting</div></div>
+        <div class="agent-row"><div class="adot" style="background:#f0a535"></div><div class="aname">Product</div></div>
+        <div class="agent-row"><div class="adot" style="background:#ef5050"></div><div class="aname">Research</div></div>
+        <div class="agent-row"><div class="adot" style="background:#8b92a5"></div><div class="aname">Task</div></div>
+      </div>
+    </div>
+
+    <div class="chat">
+      <div class="messages" id="msgs"></div>
+      <div class="iarea">
+        <div class="irow">
+          <textarea class="ibox" id="inp" placeholder="Ask ARA anything — markets, margins, contracts, reports…" rows="1" onkeydown="hkey(event)" oninput="aresize(this)"></textarea>
+          <button class="sbtn" id="sbtn" onclick="handleInput()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="ihint">Press Enter to send · Shift+Enter for new line</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SCENARIOS ─────────────────────────────────────────────────────────────────
+const SC = [
+  { title:"Launch Thailand", sub:"Full market analysis", turns:[
+    { u:"Launch Thailand",
+      a:"Good morning — let's do Thailand properly.\n\nBefore I run the full analysis, two quick questions:\n\n**1.** Are we focusing on specific regions — Phuket, Koh Samui, Krabi — or the whole country?\n**2.** Mostly hotels, or do you also have villas and packages in the mix?\n\nThis shapes the entire analysis.",
+      qr:["Phuket and Koh Samui, mostly hotels","Whole country, all product types","Just Phuket, luxury villas"] },
+    { u:"Phuket and Koh Samui, mostly hotels",
+      a:"Running the full analysis now across both destinations.\n\n**🔍 ARA Research — Market Intelligence**\n\nThailand inbound is ++up 23% year-on-year++. Peak season November–April is booking ~~14 days earlier than last year~~ — demand is accelerating hard.\n\n[CARD:Market snapshot|Phuket demand score|87 / 100|good|Koh Samui demand score|74 / 100|good|Avg booking lead time|68 days||YoY growth|+23%|good]\n\n**💰 ARA Commercial — Revenue and Margin**\n\nRevenue is strong at ++£2.4M++ but margin is only ~~14.2%~~ — that's --6.8 points below-- the 21% benchmark. This is the critical issue.\n\n[CARD:Commercial performance|Total revenue|£2.4M|good|Gross profit|£341K|warn|Current margin|14.2%|bad|Benchmark margin|21%||Profit gap|-£163K annually|bad]\n\n**📋 ARA Contracting — Supplier Risk**\n\nI've flagged --7 hotels-- priced above market rate. Biggest offender: **Anantara Phuket** at **£285/room/night** vs market rate of **£218** — a --31% premium-- costing **£42K annually**.\n\nWould you like me to show all 7 suppliers, draft a renegotiation strategy, or build the full action plan?",
+      qr:["Show me all 7 suppliers","Draft renegotiation strategy","Build the full action plan"] },
+    { u:"Show me all 7 overpriced suppliers",
+      a:"Here are all **7 flagged suppliers**. Total savings if renegotiated to market: ++£187K annually++.\n\n[CARD:Supplier cost audit — Phuket and Koh Samui|Anantara Phuket Villas|31% over — save £42K|bad|Rosewood Phuket|24% over — save £38K|bad|Conrad Koh Samui|18% over — save £29K|warn|Banyan Tree Phuket|15% over — save £24K|warn|Six Senses Samui|14% over — save £22K|warn|Keemala Phuket|11% over — save £19K|warn|Four Seasons Samui|9% over — save £13K|warn]\n\n**Focus on the top 3 first** — Anantara, Rosewood, Conrad. That's ++£109K++ and closes **67% of your margin gap**. All three contracts expire within **4 months** — perfect timing.\n\nShall I draft the renegotiation email for Anantara?",
+      qr:["Yes draft the Anantara email","Build the Q3 action plan","What is the negotiation strategy?"] },
+    { u:"Yes, draft the Anantara email",
+      a:"Here's your email — commercially sharp, relationally warm.\n\n[CARD:Draft email — Anantara Phuket Villas|To|Contracts Team, Anantara Phuket||Subject|2025/26 Contract Review — Rate Alignment|]\n\n~~Dear [Name],\n\nI hope you're well. As we approach renewal for our 2025/26 agreement, I wanted to open a conversation about our rate structure.\n\nWe delivered 847 room nights to Anantara Phuket last season with a cancellation rate below 4% — and we're projecting 18% volume growth next season.\n\nHowever, our current rate of £285 per room night is challenging against market benchmarks of £210–£225 across comparable luxury product in Phuket.\n\nWe'd like to explore a revised rate in the £215–£225 range, which would allow us to feature Anantara prominently and commit to increased volume.\n\nWould you be available for a call this week?\n\nWith thanks, [Your name]~~\n\n++✓ Ready to send.++ The email leads with your volume and loyalty — that's your leverage. Never open with the rate gap directly.\n\nWant me to draft the same for Rosewood and Conrad?",
+      qr:["Yes draft both","Build the Q3 plan","What else should I prioritise?"] }
+  ]},
+  { title:"Maldives margins", sub:"Diagnose underperformance", turns:[
+    { u:"My Maldives margin is underperforming",
+      a:"Maldives margins can collapse fast if contracts aren't tightly managed. Let me dig in.\n\n**What margin are you currently running, and what's your target?**\n\nAlso — is this across all resorts or concentrated in specific properties?",
+      qr:["Running 12%, target is 22%","It's specific resorts I think","Not sure on exact numbers"] },
+    { u:"Running 12%, target is 22%. Worse on luxury resorts.",
+      a:"A --10-point margin gap on luxury Maldives-- is significant — but almost always one of three things. Let me run the diagnostic.\n\n[CARD:Margin gap diagnosis|Current margin|12%|bad|Target margin|22%||Annual profit gap|-£210K|bad|Primary cause|Supplier costs above market|warn|Secondary cause|Sell rates too low|warn]\n\n**The three culprits:**\n\n**1. Supplier costs too high** — luxury resort contracts averaging **£680/night** vs market rate of **£520–£540**. Most signed pre-2022.\n\n**2. Sell price hasn't kept up** — you're at **£890/night**, competitors are at **£1,050–£1,200** for equivalent product. You're leaving --£160/night-- on the table.\n\n**3. Wrong product mix** — 68% of bookings are water villas but you're not commanding the premium they should carry.\n\nFix sell rates alone: ++6 margin points++. Fix both: ++exceed your 22% target++.\n\nWant the pricing uplift plan?",
+      qr:["Build the pricing uplift plan","Which contracts to renegotiate?","How do I fix product mix?"] },
+    { u:"Build the pricing uplift plan",
+      a:"Here's your Maldives pricing recovery — conservative but achievable without losing volume.\n\n[CARD:Maldives pricing uplift plan|Water villas — current rate|£890/night|bad|Water villas — recommended|£1,080/night|good|Beach villas — current rate|£640/night|warn|Beach villas — recommended|£780/night|good|Projected margin after uplift|19.4%|good|Additional annual profit|+£148K|good]\n\n**Implementation:**\n— Apply to new bookings immediately, don't touch existing\n— Water villas first — highest volume, lowest pushback risk\n— Monitor conversion 3 weeks — if bookings drop over 12%, pull back 5%\n\nCombined with contract renegotiations: ++23–24% margin++ — above your 22% target.\n\nShall I build the week-by-week implementation timeline?",
+      qr:["Yes build the timeline","Show the contract renegotiations","What is the total impact?"] }
+  ]},
+  { title:"Bali contracts", sub:"Supplier renegotiation", turns:[
+    { u:"Review my Bali contracts and find renegotiation targets",
+      a:"Bali is interesting right now — the market shifted significantly post-pandemic and many pre-2023 contracts are misaligned with current rates. Good timing.\n\n**How many supplier contracts do you hold in Bali?** Hotels only, or also villa operators and activities?",
+      qr:["About 12 hotels plus villas","Just hotels, roughly 8-10","Mix of everything, 20+ suppliers"] },
+    { u:"About 12 hotels plus some villas",
+      a:"Good — that's a meaningful portfolio. Running the full audit now.\n\n**📋 ARA Contracting — Bali Contract Audit**\n\n[CARD:Audit summary|Contracts reviewed|14 total||Overpriced vs market|8 contracts|bad|Fairly priced|4 contracts|good|Underpriced — our advantage|2 contracts|good|Total savings potential|£94K annually|good]\n\n**Top renegotiation targets:**\n\n[CARD:Priority targets|The Mulia Resort|28% over — £31K saving|bad|COMO Uma Ubud|22% over — £24K saving|bad|Alaya Resort Ubud|17% over — £16K saving|warn|Komaneka at Bisma|14% over — £13K saving|warn|Villa portfolio Seminyak|12% over — £10K saving|warn]\n\n**Good news:** Mulia and COMO Uma Ubud contracts both expire in the next **60 days** — perfect leverage window. Never renegotiate mid-contract.\n\nWant the negotiation strategy for each?",
+      qr:["Build negotiation strategy","Draft email to The Mulia","What is my leverage with COMO?"] },
+    { u:"What is my leverage with COMO Uma Ubud?",
+      a:"Your leverage with COMO is stronger than you might think.\n\n**Your leverage points:**\n\n**1. Volume** — you delivered **312 room nights last year**. Significant for a boutique property that values consistent partners over one-off bookers.\n\n**2. Market alternatives** — Komaneka at Bisma and Alaya Resort offer equivalent product at 15–18% less. You can reference this without being aggressive.\n\n**3. Forward commitment** — offer a **minimum volume guarantee of 280 room nights** in exchange for a rate reduction. Properties love certainty over uncertainty.\n\n**4. Marketing exposure** — featured placement in your newsletter or trade materials is worth more to them than the discount costs you.\n\n**Opening position:** Go in at **£185/night** (currently £228). Expect to settle at **£195–£205** — still a ++£23K annual saving++.\n\nShall I draft the negotiation script for the call?",
+      qr:["Draft the call script","Draft the email instead","Show me The Mulia strategy"] }
+  ]},
+  { title:"Draft supplier email", sub:"Negotiation letter", turns:[
+    { u:"Draft me a supplier renegotiation email",
+      a:"I'll make this sharp and effective.\n\nThree things I need to draft the right email:\n\n**1.** Which supplier or hotel?\n**2.** What are you paying now vs what you want to pay?\n**3.** Long-standing relationship or relatively new?",
+      qr:["Six Senses Samui, need 20% reduction","Anantara Phuket, paying too much","It is a new supplier relationship"] },
+    { u:"Six Senses Samui — paying £420 per night, want £340",
+      a:"That's a **£80/night reduction (19%)** — ambitious but achievable depending on your volume.\n\nOne more thing before I draft: **how many room nights did you deliver to Six Senses last year?** This is your single strongest negotiation lever.",
+      qr:["Around 200 room nights","About 400 room nights","Less than 100 — first year"] },
+    { u:"Around 200 room nights",
+      a:"200 room nights makes you a **meaningful volume partner**. Here's your email.\n\n[CARD:Draft email — Six Senses Koh Samui|Subject|Partnership Review — 2025/26 Rate Discussion|]\n\n~~Dear [Contracting Manager],\n\nI hope the season has been strong. I'm writing ahead of our contract renewal to discuss our rate structure for the coming year.\n\nOver the past season we delivered 204 room nights to Six Senses Koh Samui — and our clients consistently rate it among their top experiences. We plan to increase our Koh Samui allocation significantly for 2025/26, with Six Senses central to that growth.\n\nTo support this expanded commitment, we need to revisit our current rate of £420 per room night. Based on portfolio benchmarking, we're targeting £340–£360, which would allow us to feature Six Senses aggressively across our channels and trade partners.\n\nI'd welcome a conversation at your convenience.\n\nWarm regards, [Your name]~~\n\n++✓ Ready to send.++ Opens with your volume, signals growth, gives a range not a fixed number — never mentions competitors directly.\n\nWant the follow-up language in case they push back?",
+      qr:["Draft the pushback response","Draft one for Anantara too","Build a full negotiation plan"] }
+  ]},
+  { title:"Best performing markets", sub:"Portfolio review", turns:[
+    { u:"What are our best performing markets right now?",
+      a:"The answer might surprise you. Let me pull the full portfolio view.\n\n**📊 ARA Commercial — Portfolio Performance**\n\n[CARD:Market performance ranking|Dubai|28.4% margin — £890K revenue|good|Greece — Mykonos and Santorini|24.1% margin — £640K revenue|good|Morocco|22.8% margin — £310K revenue|good|Thailand|14.2% margin — £2.4M revenue|warn|Maldives|12.0% margin — £1.8M revenue|bad|Bali|13.6% margin — £720K revenue|warn]\n\n**The counterintuitive insight:**\n\nDubai is your most profitable market by margin. But your highest revenue markets — Thailand and Maldives — are dragging the portfolio average down to ~~16.8%~~.\n\nYou have a classic **volume vs margin tension**. If you brought Thailand and Maldives to just **20% margin**, annual profit increases by ++£380K++ — without growing revenue at all.\n\nWant me to model what it takes to close that gap?",
+      qr:["Model the margin improvement","Tell me about the Dubai success","Which market should I grow next?"] },
+    { u:"Which market should I grow next?",
+      a:"Based on the portfolio data, I'd focus growth on **two markets** with very different logic behind each.\n\n**Short term — Morocco**\n\nYour hidden gem. ++22.8% margin++, growing demand, significantly lower supplier costs than Southeast Asia. Currently your smallest market by revenue — room to double it without disrupting existing contracts. UK demand for Morocco is up ++34% this year++. You are under-resourced here.\n\n**Medium term — Japan**\n\nPost-pandemic reopening has created exceptional demand with very few quality UK operators in market. First movers are locking strong contracts before rates rise.\n\n[CARD:Growth opportunity comparison|Morocco year 1 revenue potential|+£280K|good|Morocco margin potential|24–26%|good|Japan year 2 revenue potential|+£520K|good|Japan margin potential|25–28%|good]\n\nShall I build the Morocco market entry plan — suppliers, pricing, and launch timeline?",
+      qr:["Build the Morocco plan","Tell me about Japan entry","Create a board summary of this"] }
+  ]},
+  { title:"Pricing scenario +15%", sub:"What if we raise prices?", turns:[
+    { u:"What happens if I raise Thailand prices by 15%?",
+      a:"Good scenario to model. A blanket 15% uplift sounds simple but impact varies dramatically by property type and season.\n\n**Are you thinking all Thailand product, or targeting a specific segment?**",
+      qr:["All Thailand product","Just the luxury hotels","Peak season only"] },
+    { u:"Just the luxury hotels",
+      a:"Smart targeting — luxury is where you have the most pricing power and the least price-sensitive customers. Let me model it.\n\n**📊 ARA Commercial — Pricing Scenario Model**\n\nI've run both a **full volume** and a **conservative scenario** assuming 8% booking loss from price sensitivity.\n\n[CARD:Scenario — plus 15% luxury pricing|Current luxury revenue|£1.4M||Revenue at full volume|£1.61M — plus £210K|good|Revenue with 8% volume loss|£1.48M — plus £80K|good|Margin — current|14.2%|warn|Margin after uplift|20.8%|good|Break-even volume loss|Up to 13%|good]\n\n**My verdict: ++Do it.++**\n\nYou can lose up to **13% of luxury bookings** and still be better off than today. In practice, luxury travel demand in Thailand is inelastic enough you'll likely see only 5–6% drop at 15% uplift.\n\n**One rule:** Don't apply retroactively to existing bookings. Give trade partners **30 days notice** before rates go live.\n\nWant the implementation plan and trade partner communication template?",
+      qr:["Build the implementation plan","Draft the trade partner notice","Model 20% uplift instead"] }
+  ]},
+  { title:"Hotels to cut", sub:"Portfolio culling", turns:[
+    { u:"Which hotels should I cut from our portfolio?",
+      a:"This is one of the most important commercial decisions you can make — cutting the right hotels improves margin and focus, cutting the wrong ones costs volume.\n\n**What is driving the decision?** Margin improvement, reducing operational complexity, or both?",
+      qr:["Mainly margin — cut low performers","Reducing complexity — too many to manage","Both"] },
+    { u:"Mainly margin — want to cut low performers",
+      a:"Running the margin-based cull analysis across your full portfolio now.\n\n**📋 ARA Contracting — Portfolio Cull Analysis**\n\n[CARD:Hotels recommended for removal|Centara Grand Phuket|4.1% margin — cut immediately|bad|Holiday Inn Koh Samui|5.8% margin — cut|bad|Novotel Bangkok Silom|6.2% margin — cut|bad|Amari Phuket|8.4% margin — review|warn|Mercure Koh Samui|9.1% margin — review|warn]\n\n**The top 3 are clear cuts.** Combined they generate **£118K revenue** but only **£7K profit** — and consume disproportionate ops and contracting resource.\n\nRemoving them: ++portfolio average margin up 1.8 points++, freeing resource to invest in high-margin product.\n\n**Important:** Check forward bookings before exiting any contract. Honour existing bookings — your reputation with trade partners depends on it.\n\nWant the exit communications drafted and a wind-down timeline?",
+      qr:["Draft exit communications","What do I replace them with?","Show me the top performers instead"] }
+  ]},
+  { title:"Q3 action plan", sub:"Strategic planning", turns:[
+    { u:"Build me a Q3 action plan",
+      a:"Let's build something you can actually execute — not a generic list.\n\n**What are your top 2–3 priorities for Q3?**\n\nFor example: closing the margin gap, growing a specific market, renegotiating contracts, or launching new product?",
+      qr:["Improve overall margin","Renegotiate key contracts","Launch 2 new markets"] },
+    { u:"Improve overall margin and renegotiate key contracts",
+      a:"Those two are closely linked — we can tackle them together efficiently.\n\n**⚡ ARA Task Agent — Q3 Strategic Plan**\n\n[CARD:Q3 Priority 1 — Margin improvement|Target|18% portfolio avg from 14.8%||July weeks 1–2|Audit all contracts vs market rates||July weeks 3–4|Apply pricing uplift to luxury||August|Exit bottom 3 margin hotels||September|Review impact and adjust|]\n\n[CARD:Q3 Priority 2 — Contract renegotiation|Target|£180K plus savings locked in||July|Initiate top 5 supplier conversations||August|Negotiate and finalise new rates||September|Sign revised contracts|]\n\n**Combined Q3 impact:**\n\n— Margin improvement: ++plus 3.2 points++\n— Annual profit uplift: ++plus £224K++\n— Contracts renegotiated: ++8 suppliers++\n— Savings locked in: ++£183K++\n\nCritical path: start supplier conversations in **week 1 of July** — delays in this process compound fast.\n\nWant this as a week-by-week task list with owners and deadlines?",
+      qr:["Build the week-by-week plan","Create a board summary","Draft the supplier outreach emails"] }
+  ]},
+  { title:"Thailand vs Maldives", sub:"Destination comparison", turns:[
+    { u:"Compare Thailand and Maldives — where should I focus?",
+      a:"Great question — they are very different commercial propositions. Let me run the head-to-head.\n\n[CARD:Thailand vs Maldives — head to head|Revenue|Thailand £2.4M vs Maldives £1.8M||Margin|Thailand 14.2% vs Maldives 12.0%|warn|Demand growth YoY|Thailand +23% vs Maldives +18%|good|Avg booking value|Thailand £3,200 vs Maldives £6,800||Margin fix difficulty|Thailand MEDIUM vs Maldives HARD|warn]\n\n**The honest analysis:**\n\n**Thailand** is your volume engine — more bookings, faster growth, margin problem solvable within 2 quarters through contract renegotiation.\n\n**Maldives** is your premium product — higher booking values, aspirational positioning. But supplier costs are structurally higher and harder to move.\n\n**My recommendation: ++Invest in Thailand first.++**\n\nFix Thailand margins — more achievable — then use the recovered profit to fund Maldives renegotiations which require longer relationship building. Don't cut Maldives — **£6,800 average booking value** is too important to walk away from.\n\nWant the specific Thailand investment plan for the next two quarters?",
+      qr:["Build the Thailand plan","How do I fix Maldives economics?","What about growing both?"] }
+  ]},
+  { title:"Board report", sub:"Executive summary", turns:[
+    { u:"Give me a board-level report on our commercial performance",
+      a:"Generating the board report now. Headline numbers, key issues, recommended actions — exactly what a board needs.\n\n**📋 ARA Coordinator — Board Report**\n\n**EXECUTIVE SUMMARY**\n\nThe business is generating ++£7.2M revenue++ across 8 active markets. However, portfolio margin of ~~14.8%~~ is --6.2 points below-- our 21% target — representing a --£446K annual profit gap--. This is the critical issue requiring board attention.\n\n[CARD:Group performance|Total revenue|£7.2M|good|Gross profit|£1.07M|warn|Portfolio margin|14.8% — target 21%|bad|Total bookings|2,847||Active markets|8||Suppliers contracted|64|]\n\n**KEY ISSUES FOR BOARD**\n\n**1. Supplier cost misalignment** — 31 of 64 contracts priced above market rate. Savings available: ++£312K annually++.\n\n**2. Underpricing on luxury product** — sell rates haven't kept pace with market. Revenue opportunity: ++£180K annually++.\n\n**3. Portfolio concentration risk** — Thailand and Maldives represent 58% of revenue but only 32% of profit contribution.\n\n**RECOMMENDED BOARD ACTIONS**\n\n— Approve Q3 contract renegotiation programme — target £312K savings\n— Mandate luxury pricing review — target plus 4 margin points\n— Review portfolio mix — reduce low-margin high-volume exposure\n\n**OUTLOOK**\n\nIf renegotiation and pricing corrections execute in Q3, the business hits ++19–21% margin by Q4++, adding ++£320–£440K++ to annual profit without any revenue growth required.\n\nWould you like supporting slides or a more detailed appendix for any section?",
+      qr:["Build the supporting slides","Create the Q3 renegotiation plan","Make this more detailed"] }
+  ]}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let activeSc = null, step = 0, busy = false;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  const list = document.getElementById('sc-list');
+  SC.forEach((sc, i) => {
+    const d = document.createElement('div');
+    d.className = 'sc-item';
+    d.id = 'sci' + i;
+    d.innerHTML = `<div class="sc-title">${sc.title}</div><div class="sc-sub">${sc.sub}</div>`;
+    d.onclick = () => loadSc(i);
+    list.appendChild(d);
+  });
+  showWelcome();
+}
+
+function showWelcome() {
+  document.getElementById('msgs').innerHTML = `
+    <div class="welcome" id="wlc">
+      <div style="font-size:36px;margin-bottom:16px">⚡</div>
+      <h2>Good morning. I'm ARA.</h2>
+      <p>Your AI commercial director for travel contracting and product management. Select a scenario on the left, click a card below, or just type anything.</p>
+      <div class="starter-grid">
+        <div class="starter" onclick="loadSc(0)"><div class="starter-title">🌏 Launch Thailand</div><div class="starter-sub">Full market analysis</div></div>
+        <div class="starter" onclick="loadSc(1)"><div class="starter-title">📉 Maldives margins</div><div class="starter-sub">Diagnose underperformance</div></div>
+        <div class="starter" onclick="loadSc(2)"><div class="starter-title">📋 Bali contracts</div><div class="starter-sub">Supplier renegotiation</div></div>
+        <div class="starter" onclick="loadSc(9)"><div class="starter-title">📊 Board report</div><div class="starter-sub">Executive summary</div></div>
+      </div>
+    </div>`;
+}
+
+// ── SCENARIO LOADER ───────────────────────────────────────────────────────────
+function loadSc(i) {
+  document.querySelectorAll('.sc-item').forEach(e => e.classList.remove('active'));
+  const el = document.getElementById('sci' + i);
+  if (el) el.classList.add('active');
+  activeSc = i; step = 0;
+  document.getElementById('msgs').innerHTML = '';
+  const turn = SC[i].turns[0];
+  setTimeout(() => {
+    addUserBubble(turn.u);
+    setTimeout(() => runTyping(turn.a, turn.qr || []), 500);
+  }, 80);
+}
+
+// ── INPUT HANDLING ────────────────────────────────────────────────────────────
+function handleInput() {
+  if (busy) return;
+  const inp = document.getElementById('inp');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = ''; inp.style.height = 'auto';
+  sendMsg(txt);
+}
+
+function sendMsg(txt) {
+  if (busy) return;
+  const wlc = document.getElementById('wlc');
+  if (wlc) wlc.remove();
+  addUserBubble(txt);
+
+  if (activeSc !== null) {
+    const next = step + 1;
+    if (next < SC[activeSc].turns.length) {
+      step = next;
+      const t = SC[activeSc].turns[step];
+      runTyping(t.a, t.qr || []);
+      return;
+    }
+  }
+  const r = fallback(txt);
+  runTyping(r.a, r.qr);
+}
+
+function fallback(txt) {
+  const t = txt.toLowerCase();
+  if (t.includes('email') || t.includes('draft'))
+    return { a:"I'll draft that now. Tell me: **which supplier, current rate, and target rate?**\n\nThe more specific you are, the more persuasive the email.", qr:["Six Senses Samui","Anantara Phuket","Mulia Bali"] };
+  if (t.includes('margin') || t.includes('profit'))
+    return { a:"Margin pressure usually comes from one of three things: supplier costs above market, sell rates not keeping pace, or wrong product mix.\n\n**Which market are we focused on?**", qr:["Thailand","Maldives","Whole portfolio"] };
+  if (t.includes('report') || t.includes('board'))
+    return { a:"I can generate a board report right now.\n\nOne page, headline numbers and clear recommendations — or do you need a more detailed version for the full board pack?", qr:["Board summary — one page","Full commercial review","Contract audit report"] };
+  if (t.includes('thank') || t.includes('great') || t.includes('perfect'))
+    return { a:"Glad that's useful. What would you like to tackle next?\n\nI can generate a full board report summarising everything we've discussed, or we can move straight into execution planning.", qr:["Generate board report","Build execution plan","Analyse another market"] };
+  return { a:"Understood. To give you the sharpest analysis — **which market or supplier are we focusing on, and what outcome do you need?**", qr:["Thailand analysis","Maldives contracts","Build an action plan"] };
+}
+
+// ── USER BUBBLE ───────────────────────────────────────────────────────────────
+function addUserBubble(txt) {
+  const m = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg umsg';
+  d.innerHTML = `<div class="av user">YOU</div><div class="mbody"><div class="sndr">You</div><div class="bubble user">${esc(txt)}</div></div>`;
+  m.appendChild(d);
+  sb();
+}
+
+// ── TYPING THEN STREAM ────────────────────────────────────────────────────────
+function runTyping(rawText, qrs) {
+  busy = true;
+  document.getElementById('sbtn').disabled = true;
+  const m = document.getElementById('msgs');
+
+  // Phase 1: show "thinking" dots
+  const typDiv = document.createElement('div');
+  typDiv.className = 'msg';
+  typDiv.innerHTML = `<div class="av ara">ARA</div><div class="mbody"><div class="sndr">ARA — thinking…</div><div class="tbubble"><span></span><span></span><span></span></div></div>`;
+  m.appendChild(typDiv);
+  sb();
+
+  // Delay before starting to type (simulates thinking)
+  const thinkDelay = 900 + Math.random() * 600;
+
+  setTimeout(() => {
+    typDiv.remove();
+
+    // Phase 2: create bubble and stream text into it
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg';
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = 'bubble ara';
+
+    msgDiv.innerHTML = `<div class="av ara">ARA</div>`;
+    const body = document.createElement('div');
+    body.className = 'mbody';
+    const sndr = document.createElement('div');
+    sndr.className = 'sndr';
+    sndr.textContent = 'ARA — Commercial Director';
+    body.appendChild(sndr);
+    body.appendChild(bubbleDiv);
+    msgDiv.appendChild(body);
+    m.appendChild(msgDiv);
+
+    // Stream the text
+    streamText(bubbleDiv, rawText, qrs, body);
+  }, thinkDelay);
+}
+
+// ── TYPEWRITER STREAMER ───────────────────────────────────────────────────────
+function streamText(container, rawText, qrs, body) {
+  // Parse the raw text into segments: plain text and special blocks
+  const segments = parseSegments(rawText);
+  let segIdx = 0;
+  let charIdx = 0;
+
+  // We'll build up the rendered HTML progressively
+  // For streaming, we stream plain text segments char by char
+  // and inject HTML blocks instantly
+
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+
+  let currentTextNode = null;
+  let currentSpan = null;
+
+  function nextChar() {
+    if (segIdx >= segments.length) {
+      // Done — remove cursor, show quick replies
+      cursor.remove();
+      if (qrs && qrs.length) {
+        const qrDiv = document.createElement('div');
+        qrDiv.className = 'qrs';
+        qrs.forEach(q => {
+          const chip = document.createElement('div');
+          chip.className = 'qr';
+          chip.textContent = q;
+          chip.onclick = () => sendMsg(q);
+          qrDiv.appendChild(chip);
+        });
+        body.appendChild(qrDiv);
+      }
+      busy = false;
+      document.getElementById('sbtn').disabled = false;
+      sb();
+      return;
+    }
+
+    const seg = segments[segIdx];
+
+    if (seg.type === 'html') {
+      // Inject HTML instantly
+      if (cursor.parentNode) cursor.remove();
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = seg.html;
+      container.appendChild(wrapper);
+      container.appendChild(cursor);
+      segIdx++;
+      sb();
+      setTimeout(nextChar, 30);
+      return;
+    }
+
+    // Plain text segment — stream char by char
+    if (charIdx === 0) {
+      currentSpan = document.createElement('span');
+      if (cursor.parentNode) cursor.remove();
+      container.appendChild(currentSpan);
+      container.appendChild(cursor);
+    }
+
+    const ch = seg.text[charIdx];
+    if (ch === '\n') {
+      currentSpan.appendChild(document.createElement('br'));
+    } else {
+      currentSpan.appendChild(document.createTextNode(ch));
+    }
+
+    charIdx++;
+    sb();
+
+    if (charIdx >= seg.text.length) {
+      charIdx = 0;
+      segIdx++;
+      currentSpan = null;
+      setTimeout(nextChar, 18);
+    } else {
+      // Variable speed: slower at punctuation, faster for bulk text
+      let delay = 18;
+      if (ch === '.' || ch === '!' || ch === '?') delay = 120;
+      else if (ch === ',') delay = 60;
+      else if (ch === '\n') delay = 80;
+      else if (Math.random() < 0.05) delay = 40; // occasional micro-pause
+      setTimeout(nextChar, delay);
+    }
+  }
+
+  container.appendChild(cursor);
+  setTimeout(nextChar, 40);
+}
+
+// ── TEXT PARSER ───────────────────────────────────────────────────────────────
+// Converts our simple markup into segments of {type:'text', text} or {type:'html', html}
+function parseSegments(raw) {
+  const segments = [];
+  // Split by CARD blocks first
+  const cardRe = /\[CARD:([^\]]+)\]/g;
+  let last = 0;
+  let match;
+
+  while ((match = cardRe.exec(raw)) !== null) {
+    if (match.index > last) {
+      const slice = raw.slice(last, match.index);
+      pushTextSegments(segments, slice);
+    }
+    segments.push({ type: 'html', html: buildCard(match[1]) });
+    last = cardRe.lastIndex;
+  }
+  if (last < raw.length) {
+    pushTextSegments(segments, raw.slice(last));
+  }
+  return segments;
+}
+
+function pushTextSegments(segments, txt) {
+  // Handle inline markup: **bold**, ++green++, ~~italic/muted~~, --red--
+  // We'll convert these to HTML and push as html segments, with plain text for the rest
+  // Split by markup patterns
+  const re = /(\*\*[^*]+\*\*|\+\+[^+]+\+\+|~~[^~]+~~|--[^-]+--)/ ;
+  const parts = txt.split(re);
+  parts.forEach(part => {
+    if (!part) return;
+    if (part.startsWith('**') && part.endsWith('**')) {
+      segments.push({ type: 'html', html: `<b>${esc(part.slice(2,-2))}</b>` });
+    } else if (part.startsWith('++') && part.endsWith('++')) {
+      segments.push({ type: 'html', html: `<span class="good">${esc(part.slice(2,-2))}</span>` });
+    } else if (part.startsWith('~~') && part.endsWith('~~')) {
+      segments.push({ type: 'html', html: `<span class="warn">${esc(part.slice(2,-2))}</span>` });
+    } else if (part.startsWith('--') && part.endsWith('--')) {
+      segments.push({ type: 'html', html: `<span class="bad">${esc(part.slice(2,-2))}</span>` });
+    } else {
+      // Plain text — stream char by char
+      segments.push({ type: 'text', text: part });
+    }
+  });
+}
+
+function buildCard(def) {
+  const parts = def.split('|');
+  const title = parts[0];
+  let html = `<div class="dcard"><div class="dcard-t">${esc(title)}</div>`;
+  for (let i = 1; i + 1 < parts.length; i += 3) {
+    const k = parts[i] || '';
+    const v = parts[i+1] || '';
+    const cls = parts[i+2] || '';
+    if (!k && !v) continue;
+    html += `<div class="drow"><span class="dk">${esc(k)}</span><span class="dv ${cls}">${esc(v)}</span></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function sb() { const m = document.getElementById('msgs'); setTimeout(() => { m.scrollTop = m.scrollHeight; }, 30); }
+function aresize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 130) + 'px'; }
+function hkey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleInput(); } }
+function resetChat() {
+  activeSc = null; step = 0; busy = false;
+  document.getElementById('sbtn').disabled = false;
+  document.querySelectorAll('.sc-item').forEach(e => e.classList.remove('active'));
+  showWelcome();
+}
+
+init();
+</script>
+</body>
+</html>
